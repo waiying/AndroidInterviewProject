@@ -192,8 +192,10 @@ public class Connect4_AI {
 
 		// find first open row
 		for (int i = 0; i < SettingsScreen.columns; ++i){
-			if (game.getFirstCellUnoccupiedCoord(i).y < firstOpenRowY){
-				firstOpenRowY = game.getFirstCellUnoccupiedCoord(i).y;
+			if (game.getFirstCellUnoccupiedCoord(i) != null){
+				if (game.getFirstCellUnoccupiedCoord(i).y < firstOpenRowY){
+					firstOpenRowY = game.getFirstCellUnoccupiedCoord(i).y;
+				}
 			}
 		}
 		
@@ -202,9 +204,9 @@ public class Connect4_AI {
 
 		for (int k = 0; k < SettingsScreen.columns; ++k)
 		{
-			if (game.getFirstCellUnoccupiedCoord(k).y > lastRowY)
-			{
-				lastRowY = game.getFirstCellUnoccupiedCoord(k).y;
+			if (game.getFirstCellUnoccupiedCoord(k) != null){
+				if (game.getFirstCellUnoccupiedCoord(k).y > lastRowY)
+					lastRowY = game.getFirstCellUnoccupiedCoord(k).y;
 			}
 		}
 		

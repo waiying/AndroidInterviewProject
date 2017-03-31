@@ -252,7 +252,11 @@ public class GameScreen implements Screen{
 		
 		prevPiece.remove();
 		cellInfo[prevRow][prevCol] = 0;
-		firstCellUnoccupied[prevCol] = new Point((int)prevColX, firstCellUnoccupied[prevCol].y - boardCellHeight);
+		if (firstCellUnoccupied[prevCol] == null){
+			float prevRowY = coordinates[SettingsScreen.rows-1][SettingsScreen.columns-1].y;
+			firstCellUnoccupied[prevCol] = new Point((int)prevColX, (int)prevRowY);
+		} else
+			firstCellUnoccupied[prevCol] = new Point((int)prevColX, firstCellUnoccupied[prevCol].y - boardCellHeight);
 		currPlayer = currPlayer%2 + 1; // switch back to previous player
 	}
 	
