@@ -139,7 +139,6 @@ public class GameScreen implements Screen{
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button){
 				// play move when a column is clicked
 				if (!gameOver && (!connectAI.turn))
-					System.out.println("my turn");
 					makeMove(actor.getX());
 				return true;
 			}
