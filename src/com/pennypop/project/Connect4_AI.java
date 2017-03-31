@@ -18,6 +18,7 @@ public class Connect4_AI {
 		firstOpenRow = 0;
 		col = new ArrayList<Integer>(SettingsScreen.columns);
 		
+		// initialize col to arbitrary zeros
 		for (int i = 0; i < SettingsScreen.columns; ++i){
 			col.add(0);
 		}
@@ -35,6 +36,7 @@ public class Connect4_AI {
 		int beta = Integer.MAX_VALUE;
 		long startTime = System.currentTimeMillis();
 		float chosenMove = 0;
+		boolean terminated = false;
 		
 		while (!terminate(startTime)) // perform Iterative Deepening Search
 		{
@@ -46,10 +48,8 @@ public class Connect4_AI {
 			{
 				if(terminate(startTime))
 				{
-					plyLimit -= 1;
-					game.makeMove(chosenMove);
-					turn = false;
-					return;
+					terminated = true;
+					break;
 				}
 
 				if (game.getFirstCellUnoccupiedCoord(i) != null)
@@ -65,11 +65,14 @@ public class Connect4_AI {
 					game.unMakeMove();
 				}
 			}
-			plyLimit += 1;
+			if (terminated)
+				plyLimit--;
+			else
+				plyLimit += 1;
 			float colX = game.getFirstCellUnoccupiedCoord(col.indexOf(max)).x;
-			chosenMove = colX; // chosenMove is inherited from AIModule
+			chosenMove = colX;
+			//System.out.println(chosenMove);
 		}
-		
 		game.makeMove(chosenMove);
 		turn = false;
 	}
@@ -81,12 +84,15 @@ public class Connect4_AI {
 
 		if (game.isGameOver())
 		{
+			System.out.println("AI detected a game over.");
 			if (game.getWinner() == 0)
 			{
+				System.out.println("AI's opponent's predicted move is a tie.");
 				return 0;
 			}
 			else
 			{
+				System.out.println("AI's opponent's predicted move is win.");
 				return Integer.MAX_VALUE;
 			}
 		}
@@ -132,13 +138,15 @@ public class Connect4_AI {
 
 		if (game.isGameOver())
 		{
+			System.out.println("AI detected a game over.");
 			if (game.getWinner() == 0)
 			{
+				System.out.println("AI's opponent's predicted move is a tie.");
 				return 0;
 			}
 			else 
 			{
-				//System.out.print("MAX ply #" + ply);
+				System.out.println("AI's opponent's predicted move is win.");
 				return Integer.MIN_VALUE;
 			}
 		}
@@ -355,7 +363,7 @@ public class Connect4_AI {
 					line.add(game.getCellInfo(row-j, x-j));
 
 					if (line.get(0) == 2 && 
-							((row+1 > SettingsScreen.rows || x+1 > SettingsScreen.columns) || game.getCellInfo(row+1, x+1) == 0) && j != 3) // if currCoin is AI's coin
+							((row+1 == SettingsScreen.rows || x+1 == SettingsScreen.columns) || game.getCellInfo(row+1, x+1) == 0) && j != SettingsScreen.win_size-1) // if currCoin is AI's coin
 					{
 						if (line.get(j) == 2 && j != 0)
 						{
@@ -363,7 +371,7 @@ public class Connect4_AI {
 						}
 					}
 					else if (line.get(0) != 0 && 
-							((row+1 > SettingsScreen.rows || x+1 > SettingsScreen.columns) || game.getCellInfo(row+1, x+1) == 0) && j != 3) // if currCoin is Opponent's coin
+							((row+1 == SettingsScreen.rows || x+1 == SettingsScreen.columns) || game.getCellInfo(row+1, x+1) == 0) && j != SettingsScreen.win_size-1) // if currCoin is Opponent's coin
 					{
 						if (line.get(j) != 2 && j != 0)
 						{
@@ -394,7 +402,7 @@ public class Connect4_AI {
 					line.add(game.getCellInfo(row-j, x+j));
 
 					if (line.get(0) == 2 && 
-							((row+1 > SettingsScreen.rows || x-1 < 0) || game.getCellInfo(row+1, x-1) == 0) && j != 3) // if currCoin is AI's coin
+							((row+1 == SettingsScreen.rows || x-1 < 0) || game.getCellInfo(row+1, x-1) == 0) && j != SettingsScreen.win_size-1) // if currCoin is AI's coin
 					{
 						if (line.get(j) == 2 && j != 0)
 						{
@@ -402,7 +410,7 @@ public class Connect4_AI {
 						}
 					}
 					else if (line.get(0) != 0 && 
-							((row+1 > SettingsScreen.rows || x-1 < 0) || game.getCellInfo(row+1, x-1) == 0) && j != 3) // if currCoin is Opponent's coin
+							((row+1 == SettingsScreen.rows || x-1 < 0) || game.getCellInfo(row+1, x-1) == 0) && j != SettingsScreen.win_size-1) // if currCoin is Opponent's coin
 					{
 						if (line.get(j) != 2 && j != 0)
 						{

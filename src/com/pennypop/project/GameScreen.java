@@ -138,7 +138,7 @@ public class GameScreen implements Screen{
 			
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button){
 				// play move when a column is clicked
-				if (!gameOver && (!connectAI.turn))
+				if (!gameOver && !connectAI.turn)
 					makeMove(actor.getX());
 				return true;
 			}
@@ -295,8 +295,10 @@ public class GameScreen implements Screen{
 				return true;
 			}
 			count = 0; // reset
-		} else
-			exceedBottomBounds = true;
+		} else{
+			if (row - (SettingsScreen.win_size - 1) < 0)
+				exceedBottomBounds = true;
+		}
 		
 		// check bottom
 		if (!exceedBottomBounds){
@@ -444,7 +446,7 @@ public class GameScreen implements Screen{
 		if (drawRect && !gameOver)
 			renderRectOutline();
 		
-		if (AI && currPlayer == 2 && !connectAI.turn){
+		if (AI && currPlayer == 2 && !connectAI.turn && !gameOver){
 			connectAI.getNextMove();
 		}
 	}
