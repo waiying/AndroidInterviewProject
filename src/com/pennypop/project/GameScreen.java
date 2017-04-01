@@ -358,8 +358,9 @@ public class GameScreen implements Screen{
 				// column is full, check if the last piece is the winning player
 				if (foundConsec(SettingsScreen.rows - 1, i)){
 					gameOver = true;
-					System.out.println("Game Over1");
-					displayResults(redWon, tiedGame);
+					//System.out.println("Game Over1");
+					if (!connectAI.turn)
+						displayResults(redWon, tiedGame);
 					return;
 				}
 				nullCount += 1;
@@ -371,8 +372,9 @@ public class GameScreen implements Screen{
 			if (row != 0){
 				if (foundConsec(row-1, i)){
 					gameOver = true;
-					System.out.println("Game Over2");
-					displayResults(redWon, tiedGame);
+					//System.out.println("Game Over2");
+					if (!connectAI.turn)
+						displayResults(redWon, tiedGame);
 					return;
 				}					
 			}
@@ -382,23 +384,29 @@ public class GameScreen implements Screen{
 		if (nullCount == SettingsScreen.columns){
 			tiedGame = true;
 			gameOver = true;
-			displayResults(redWon, tiedGame);
-			System.out.println("Game Over3");
+			if (!connectAI.turn)
+				displayResults(redWon, tiedGame);
+			//System.out.println("Game Over3");
 		}
 	}
 	
 	public boolean isGameOver(){
-		if (gameOver || tiedGame)
+		checkGameState();
+		if (gameOver || tiedGame){
+			gameOver = false;
+			tiedGame = false;
 			return true;
-		else
+		}else
 			return false;
 	}
 	
 	public int getWinner(){
 		if (redWon){
+			redWon = false;
 			return 1;
 		}
 		else if (tiedGame){
+			tiedGame = false;
 			return 0;
 		}
 		else

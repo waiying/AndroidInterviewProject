@@ -13,7 +13,6 @@ public class Connect4_AI {
 	
 	public Connect4_AI(GameScreen game){
 		this.game = game;
-		plyLimit = 2;
 		turn = false;
 		firstOpenRow = 0;
 		col = new ArrayList<Integer>(SettingsScreen.columns);
@@ -36,7 +35,7 @@ public class Connect4_AI {
 		int beta = Integer.MAX_VALUE;
 		long startTime = System.currentTimeMillis();
 		float chosenMove = 0;
-		boolean terminated = false;
+		plyLimit = 2;
 		
 		while (!terminate(startTime)) // perform Iterative Deepening Search
 		{
@@ -48,8 +47,10 @@ public class Connect4_AI {
 			{
 				if(terminate(startTime))
 				{
-					terminated = true;
-					break;
+					plyLimit--;
+					game.makeMove(chosenMove);
+					turn = false;
+					return;
 				}
 
 				if (game.getFirstCellUnoccupiedCoord(i) != null)
@@ -65,13 +66,10 @@ public class Connect4_AI {
 					game.unMakeMove();
 				}
 			}
-			if (terminated)
-				plyLimit--;
-			else
-				plyLimit += 1;
+
+			plyLimit += 1;
 			float colX = game.getFirstCellUnoccupiedCoord(col.indexOf(max)).x;
 			chosenMove = colX;
-			//System.out.println(chosenMove);
 		}
 		game.makeMove(chosenMove);
 		turn = false;
@@ -84,15 +82,12 @@ public class Connect4_AI {
 
 		if (game.isGameOver())
 		{
-			System.out.println("AI detected a game over.");
 			if (game.getWinner() == 0)
 			{
-				System.out.println("AI's opponent's predicted move is a tie.");
 				return 0;
 			}
 			else
 			{
-				System.out.println("AI's opponent's predicted move is win.");
 				return Integer.MAX_VALUE;
 			}
 		}
@@ -127,7 +122,6 @@ public class Connect4_AI {
 				}
 			}
 		}
-
 		return min;
 	} // End minVal
 	
@@ -138,15 +132,12 @@ public class Connect4_AI {
 
 		if (game.isGameOver())
 		{
-			System.out.println("AI detected a game over.");
 			if (game.getWinner() == 0)
 			{
-				System.out.println("AI's opponent's predicted move is a tie.");
 				return 0;
 			}
 			else 
 			{
-				System.out.println("AI's opponent's predicted move is win.");
 				return Integer.MIN_VALUE;
 			}
 		}
