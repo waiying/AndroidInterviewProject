@@ -138,8 +138,9 @@ public class GameScreen implements Screen{
 			
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button){
 				// play move when a column is clicked
-				if (!gameOver && !connectAI.turn)
+				if (!gameOver && !connectAI.turn){
 					makeMove(actor.getX());
+				}
 				return true;
 			}
 		};
@@ -428,7 +429,7 @@ public class GameScreen implements Screen{
 			result.add(tie).pad(10);
 		}
 		else {
-			Label yellowWinner = new Label("Yellow Player Won!", new Label.LabelStyle(MainScreen.font, Color.YELLOW));
+			Label yellowWinner = new Label("Yellow Player Won!", new Label.LabelStyle(MainScreen.font, Color.valueOf("f4e842")));
 			result.add(yellowWinner).pad(10);
 		}
 	}

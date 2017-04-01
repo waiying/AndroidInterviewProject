@@ -25,7 +25,7 @@ public class Connect4_AI {
 	
 	/** terminate after 500ms **/
 	private boolean terminate(long startTime){
-		return System.currentTimeMillis() - startTime > 500;
+		return System.currentTimeMillis() - startTime > 300;
 	}
 	
 	public void getNextMove(){
