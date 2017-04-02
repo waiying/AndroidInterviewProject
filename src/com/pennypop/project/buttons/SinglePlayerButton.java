@@ -15,7 +15,6 @@ import com.pennypop.project.ProjectApplication;
  * button will bring the application to the Game Screen in AI mode from the Settings Screen. 
  * @author Angie (Wai Ying Li)
  */
-
 public class SinglePlayerButton extends PennyPopButtons{
 	private Screen settingsScreen;
 	private GameScreen gameScreen;

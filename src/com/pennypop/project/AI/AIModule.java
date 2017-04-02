@@ -16,7 +16,6 @@ import com.pennypop.project.GameScreen;
  * @see AlphaBetaAI
  *
  */
-
 public abstract class AIModule {
 	protected final GameScreen game;
 	protected boolean turn;

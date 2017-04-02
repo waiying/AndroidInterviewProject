@@ -5,6 +5,7 @@ import java.util.Stack;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -38,6 +39,7 @@ public class GameScreen implements Screen{
 	private int currPlayer; // 1 = red player, 2 = yellow player/AI
 	private final Texture red, yellow; 
 	private AlphaBetaAI connectAI;
+	private boolean sfxPlaying;
 	
 	/**stores arrays of previous moves' info**/
 	private Stack<Object[]> historyStack;
@@ -70,6 +72,7 @@ public class GameScreen implements Screen{
 		gameOver = false;
 		tiedGame = false;
 		redWon = false;
+		sfxPlaying = false;
 		currPlayer = 1;	// red goes first
 		
 		historyStack = new Stack<Object[]>();
@@ -503,6 +506,13 @@ public class GameScreen implements Screen{
 		else {
 			Label yellowWinner = new Label("Yellow Player Won!", new Label.LabelStyle(MainScreen.font, Color.valueOf("f4e842")));
 			result.add(yellowWinner).pad(10);
+		}
+		
+		// play winner sfx
+		if (!sfxPlaying){
+			sfxPlaying = true;
+			Sound sfx = Gdx.audio.newSound(Gdx.files.internal("TaDa.mp3"));
+			sfx.play(0.2f);
 		}
 	}
 	

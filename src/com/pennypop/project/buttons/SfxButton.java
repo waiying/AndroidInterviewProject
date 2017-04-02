@@ -12,7 +12,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
  * button will make a clicking sound effect. 
  * @author Angie (Wai Ying Li)
  */
-
 public class SfxButton extends PennyPopButtons{
 	/**
 	 * This is the constructor to create a sfx button using the given file image

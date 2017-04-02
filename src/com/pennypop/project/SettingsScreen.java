@@ -24,7 +24,6 @@ import com.pennypop.project.buttons.TwoPlayersButton;
  * @author Angie
  *
  */
-
 public class SettingsScreen implements Screen{
 	private final SpriteBatch spriteBatch;
 	private final Stage stage;
@@ -80,15 +79,15 @@ public class SettingsScreen implements Screen{
 		
 		userSettings.row().padBottom(30);
 		userSettings.add(boardWidthLabel).right();
-		userSettings.add(colInput).width(50).height(40).padLeft(10);
+		userSettings.add(colInput).width(50).height(35).padLeft(10);
 		
 		userSettings.row().padBottom(30);
 		userSettings.add(boardHeightLabel).right();
-		userSettings.add(rowInput).width(50).height(40).padLeft(10);
+		userSettings.add(rowInput).width(50).height(35).padLeft(10);
 		
 		userSettings.row().padBottom(50);
 		userSettings.add(winLineSizeLabel);
-		userSettings.add(winSizeInput).width(50).height(40).padLeft(10);
+		userSettings.add(winSizeInput).width(50).height(35).padLeft(10);
 		
 		Table startButtons = new Table();
 		startButtons.add(singleButton.getImageButton()).right().spaceRight(20);

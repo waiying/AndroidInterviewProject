@@ -15,7 +15,6 @@ import com.pennypop.project.ProjectApplication;
  * a click event that will bring the application back to the Main Screen when the button is clicked.
  * @author Angie
  */
-
 public class MainButton extends PennyPopButtons{
 	private Screen gameScreen;
 	private Screen mainScreen;

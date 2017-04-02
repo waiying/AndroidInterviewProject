@@ -12,9 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
  * give the button a specific event when clicked.
  * 
  * @author Angie (Wai Ying Li)
- *
  */
-
 public abstract class PennyPopButtons {
 	private Texture buttonTexture;
 	private TextureRegion buttonTextureReg;
@@ -33,9 +31,7 @@ public abstract class PennyPopButtons {
 		imgButton = new ImageButton(buttonDrawable);
 	}
 	
-	/**
-	 * This method returns the ImageButton object.
-	 */
+	/**This method returns the ImageButton object.*/
 	public ImageButton getImageButton(){
 		return imgButton;
 	}
