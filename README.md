@@ -25,6 +25,6 @@ click event. The AI package has an AI Module base class for any Connect 4 AI imp
 implemented for the game.
 
 ## AI Implementation ##
-The AI created for this connect 4 project can be viewed in the [AlphaBetaAI.java](https://github.com/waiying/AndroidInterviewProject/blob/master/src/com/pennypop/project/AI/AlphaBetaAI.java) file. This AI uses a minimax algorithm with alpha beta pruning to improve how far ahead the AI can explore down the game tree. 
+The AI created for this connect 4 project can be viewed in the [AlphaBetaAI.java](https://github.com/waiying/AndroidInterviewProject/blob/master/src/com/pennypop/project/AI/AlphaBetaAI.java) file. This AI uses a minimax algorithm with alpha beta pruning to improve how far ahead the AI can explore down the game tree. To give a little bit more detail, the AI performs a simulation of the game with predictions of its opponent's move in order to make the best possible move.
 
 
