@@ -17,33 +17,50 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.pennypop.project.AI.AlphaBetaAI;
 import com.pennypop.project.buttons.MainButton;
+
+/**
+ * This class controls the whole connect 4 game. The settings (dimensions, winning size, and 
+ * players) of the board are initialized in the screen before this, the SettingsScreen.
+ * 
+ * @author Angie
+ */
 
 public class GameScreen implements Screen{
 	private final SpriteBatch spriteBatch;
 	private final ShapeRenderer sr;
 	
 	private final Stage stage;
-	private final boolean AI;
-	private boolean drawRect;
+	private final boolean AI; // AI enabled?
+	private boolean drawRect; // is a rectangle drawn already for this column being hovered on?
 	public boolean gameOver, tiedGame, redWon;
 	private int currPlayer; // 1 = red player, 2 = yellow player/AI
-	private final Texture red, yellow;
-	private int boardCellWidth, boardCellHeight;
-	private Connect4_AI connectAI;
+	private final Texture red, yellow; 
+	private AlphaBetaAI connectAI;
 	
-	public Stack<Object[]> historyStack;
+	/**stores arrays of previous moves' info**/
+	private Stack<Object[]> historyStack;
 	
-	// dimensions and coordinates for the rectangle outline of columns to play in
+	/** dimensions and coordinates for the rectangle outline of columns hovered over**/
 	private float rectWidth, rectHeight, rectX, rectY;
 	
-	// array of coordinates of each board cell's top left corner
+	// Board info
+	/**width and height of the board cell that makes the entire board**/
+	private int boardCellWidth, boardCellHeight;
+	/** array of coordinates of each board cell's bottom left corner **/
 	private Point[][] coordinates;
-	// 2d array of which player occupied each cell
+	/** 2d array of which player occupied each cell **/
 	private int[][] cellInfo;
-	// array of the coordinates of the first unoccupied cell of each column
+	/** array of the coordinates of the first unoccupied cell of each column**/
 	private Point[] firstCellUnoccupied; 
 	
+	/**
+	 * The GameScreen constructor sets up the board, player pieces, and the UI.
+	 * @param spriteBatch (SpriteBatch) the sprite batch used for this whole application,
+	 * should be passed down from ProjectApplication
+	 * @param ai (boolean) should the AI be enabled? This will be set if 1 player option is chosen.
+	 */
 	public GameScreen(SpriteBatch spriteBatch, boolean ai){
 		this.spriteBatch = spriteBatch;
 		sr = new ShapeRenderer();
@@ -66,7 +83,7 @@ public class GameScreen implements Screen{
 		red = new Texture(Gdx.files.internal("red.png"));
 		yellow = new Texture(Gdx.files.internal("yellow.png"));
 		
-		connectAI = new Connect4_AI(this);
+		connectAI = new AlphaBetaAI(this);
 		
 		makeBoard();
 		
@@ -89,6 +106,12 @@ public class GameScreen implements Screen{
 		stage.addActor(titleTab);
 	}
 	
+	/**
+	 * The makeBoard method initializes the board's info according to the user's specified 
+	 * settings from the settings screen and sets it up for rendering. It also sets up the
+	 * rectangle outline info for rendering later when a column in the board is hovered over 
+	 * by the mouse.
+	 */
 	private void makeBoard(){
 		Texture boardTexture = new Texture(Gdx.files.internal("board.png"));
 		
@@ -122,8 +145,12 @@ public class GameScreen implements Screen{
 		}
 	}
 	
-	/** adds a hovering effect for each column and click event to make move **/
-	private void addHoverClickEvent(final Actor actor) {
+	/** 
+	 * This method adds a hovering effect for each column and click event to make move. This is
+	 * invoked in the makeBoard method for each board cell.
+	 * @param actor (Image) the board cell image
+	 */
+	private void addHoverClickEvent(final Image actor) {
 		InputListener listener = new InputListener(){
 			public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor){
 				// draw box around the clicked board cell's column using renderRectOutline
@@ -138,7 +165,7 @@ public class GameScreen implements Screen{
 			
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button){
 				// play move when a column is clicked
-				if (!gameOver && !connectAI.turn){
+				if (!gameOver && !connectAI.getTurn()){
 					makeMove(actor.getX());
 				}
 				return true;
@@ -148,19 +175,43 @@ public class GameScreen implements Screen{
 		actor.addListener(listener);
 	}
 	
+	/**
+	 * This method gets the (x,y) coordinates of the bottom left corner of the specified
+	 * board cell. This method should be invoked by an AI.
+	 * @param row (int) the row index of the board
+	 * @param col (int) the column index of the board
+	 * @return a point coordinate for the specified board cell
+	 * @see AlphaBetaAI
+	 */
 	public Point getCoordinates(int row, int col){
 		return coordinates[row][col];
 	}
 	
+	/**
+	 * This method sees which player occupies the specified cell. 
+	 * @param row (int) the row index of the board
+	 * @param col (int) the column index of the board
+	 * @return An int. 1 for red player, 2 for yellow player, 0 if unoccupied.
+	 */
 	public int getCellInfo(int row, int col){
 		return cellInfo[row][col];
 	}
 	
+	/**
+	 * This method gets the (x,y) coordinates of the bottom left corner of first unoccupied 
+	 * cell of the specified column.
+	 * @param col (int) the column index of the board cell
+	 * @return (Point) coordinates
+	 */
 	public Point getFirstCellUnoccupiedCoord(int col){
 		return firstCellUnoccupied[col];
 	}
 	
-	/** Converts the y coordinate to the row index of the board **/
+	/** 
+	 * This method converts the y coordinate to the row index of the board
+	 * @param y (float) the y coordinate of the left bottom corner of the board cell
+	 * @return (int) the row index of the board cell
+	 */
 	public int getRowIndex(float y){
 		int row = -1;
 		
@@ -172,7 +223,11 @@ public class GameScreen implements Screen{
 		return row;
 	}
 	
-	/** Converts the x coordinate to the column index of the board **/
+	/** 
+	 * This method converts the x coordinate to the column index of the board
+	 * @param x (float) the x coordinate of the left bottom corner of the board cell
+	 * @return (int) the column index of the board cell
+	 */
 	public int getColIndex(float x){
 		int col = -1;
 		
@@ -192,13 +247,16 @@ public class GameScreen implements Screen{
 		if (currPlayer == 1)
 			sr.setColor(Color.RED);
 		else if (currPlayer == 2)
-			sr.setColor(Color.valueOf("fffa00"));
+			sr.setColor(Color.valueOf("fffa00")); // sets color to a yellow shade
 		
 		sr.rect(rectX, rectY, rectWidth, rectHeight);
 		sr.end();
 	}
 	
-	/** makes a move in colX, which is the x coordinate of the column to play in**/
+	/** 
+	 * This method makes a move in colX, which is the x coordinate of the column to play in
+	 * @param colX (float) the x coordinate of the column to play in
+	 */
 	public void makeMove(float colX){
 		float x, y;
 		Image playerPiece;
@@ -242,8 +300,9 @@ public class GameScreen implements Screen{
 		
 		// switch players
 		currPlayer = currPlayer%2 + 1;
-	}
+	} // end makeMove
 	
+	/** This method unmakes the most recently made move */
 	public void unMakeMove(){
 		Object[] recentHistory = historyStack.pop();
 		Image prevPiece = (Image) recentHistory[0];
@@ -261,7 +320,14 @@ public class GameScreen implements Screen{
 		currPlayer = currPlayer%2 + 1; // switch back to previous player
 	}
 	
-	/** finds if there are n consecutive pieces connected from the current cell **/
+	/** 
+	 * This method finds if there are n consecutive pieces connected from the current cell.
+	 * This method is invoked in checkGameState.
+	 * @param row (int) the row index of the board cell
+	 * @param col (int) the column index of the board cell
+	 * @return (boolean) true if there are SettingsScreen.winning_size pieces connected in a row,
+	 * false otherwise.
+	 */
 	private boolean foundConsec(int row, int col){
 		int player = cellInfo[row][col]; // get player
 		int count = 0;
@@ -352,6 +418,7 @@ public class GameScreen implements Screen{
 		int row;
 		int nullCount = 0;
 		
+		// check for game over
 		for (int i = 0; i < SettingsScreen.columns; ++i){
 			if (firstCellUnoccupied[i] != null)
 				y = firstCellUnoccupied[i].y;
@@ -359,8 +426,7 @@ public class GameScreen implements Screen{
 				// column is full, check if the last piece is the winning player
 				if (foundConsec(SettingsScreen.rows - 1, i)){
 					gameOver = true;
-					//System.out.println("Game Over1");
-					if (!connectAI.turn)
+					if (!connectAI.getTurn())
 						displayResults(redWon, tiedGame);
 					return;
 				}
@@ -373,8 +439,7 @@ public class GameScreen implements Screen{
 			if (row != 0){
 				if (foundConsec(row-1, i)){
 					gameOver = true;
-					//System.out.println("Game Over2");
-					if (!connectAI.turn)
+					if (!connectAI.getTurn())
 						displayResults(redWon, tiedGame);
 					return;
 				}					
@@ -385,35 +450,42 @@ public class GameScreen implements Screen{
 		if (nullCount == SettingsScreen.columns){
 			tiedGame = true;
 			gameOver = true;
-			if (!connectAI.turn)
+			if (!connectAI.getTurn())
 				displayResults(redWon, tiedGame);
-			//System.out.println("Game Over3");
 		}
-	}
+	} // end checkGameState
 	
+	/** A method called by the AI to check for game over during simulation*/
 	public boolean isGameOver(){
 		checkGameState();
 		if (gameOver || tiedGame){
-			gameOver = false;
+			// sets flags back to false for the actual game
+			gameOver = false; 
 			tiedGame = false;
 			return true;
 		}else
 			return false;
 	}
 	
+	/** A method called by the AI to get the winner of the game simulation*/
 	public int getWinner(){
 		if (redWon){
-			redWon = false;
+			redWon = false; // sets flag back to false for the actual game
 			return 1;
 		}
 		else if (tiedGame){
-			tiedGame = false;
+			tiedGame = false; // sets flag back to false for the actual game
 			return 0;
 		}
-		else
+		else // yellow won
 			return 2;
 	}
 	
+	/**
+	 * This method sets up the result of the game to be rendered after the game is over.
+	 * @param redWins (boolean) true if red won, false otherwise.
+	 * @param tied (boolean) true if game is tied, false otherwise.
+	 */
 	private void displayResults(boolean redWins, boolean tied){
 		Table result = new Table();
 		result.setFillParent(true);
@@ -455,7 +527,7 @@ public class GameScreen implements Screen{
 		if (drawRect && !gameOver)
 			renderRectOutline();
 		
-		if (AI && currPlayer == 2 && !connectAI.turn && !gameOver){
+		if (AI && currPlayer == 2 && !connectAI.getTurn() && !gameOver){
 			connectAI.getNextMove();
 		}
 	}

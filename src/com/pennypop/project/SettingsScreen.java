@@ -15,6 +15,16 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.pennypop.project.buttons.SinglePlayerButton;
 import com.pennypop.project.buttons.TwoPlayersButton;
 
+/**
+ * The SettingsScreen class is used to let the user specified the settings of the connect 4 game.
+ * The user can specify the number of columns and rows in the board as well as the winning size 
+ * of the connected line. From there, the user will have to pick either the 1-player mode, or the
+ * 2-players mode.
+ * 
+ * @author Angie
+ *
+ */
+
 public class SettingsScreen implements Screen{
 	private final SpriteBatch spriteBatch;
 	private final Stage stage;
@@ -29,6 +39,10 @@ public class SettingsScreen implements Screen{
 	private TextField rowInput;
 	private TextField winSizeInput;
 	
+	/**
+	 * The constructor sets up all the texts, input boxes, and buttons on the screen.
+	 * @param spriteBatch (SpriteBatch) the sprite batch of this application
+	 */
 	public SettingsScreen(SpriteBatch spriteBatch) {
 		this.spriteBatch = spriteBatch;
 		stage = new Stage(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false, this.spriteBatch);
@@ -59,10 +73,8 @@ public class SettingsScreen implements Screen{
 		// set up tables and add widgets to table
 		rootTable = new Table();
 		rootTable.setFillParent(true);
-		//rootTable.debug();
 		
 		Table userSettings = new Table();
-		//userSettings.debug();
 		userSettings.row().padBottom(60);
 		userSettings.add(title).colspan(2);
 		
@@ -89,6 +101,12 @@ public class SettingsScreen implements Screen{
 		stage.addActor(rootTable);
 	}
 	
+	/**
+	 * This method loads an image file to get a TextureRegionDrawable object in order to make the
+	 * labels and image widgets in the SettingsScreen constructor.
+	 * @param string (String) the file path of the image
+	 * @return a TextureRegionDrawable of the given image
+	 */
 	private TextureRegionDrawable getDrawable(String string){
 		Texture texture = new Texture(string); 
 		TextureRegion textureReg = new TextureRegion(texture);
@@ -96,6 +114,7 @@ public class SettingsScreen implements Screen{
 		return drawable;
 	}
 	
+	/** This method updates the settings of the board as the user gives the input */
 	private void updateSettingsVariables() {
 		if (!colInput.getText().equals(""))
 			columns = Integer.valueOf(colInput.getText());
@@ -117,11 +136,9 @@ public class SettingsScreen implements Screen{
 
 	@Override
 	public void render(float delta) {
-		//System.out.println("GameScreen rendered.");
 		updateSettingsVariables();
 		stage.act(delta);
 		stage.draw();
-		Table.drawDebug(stage);
 	}
 
 	@Override

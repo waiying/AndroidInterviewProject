@@ -48,7 +48,7 @@ public class ProjectApplication implements ApplicationListener {
 		screen.render(Gdx.graphics.getDeltaTime());
 	}
 	
-	/** Switches screen **/
+	/** Switches screen to newScreen**/
 	public static void updateScreen(Screen newScreen) {
 		screen = newScreen;
 	}

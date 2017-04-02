@@ -7,7 +7,18 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 
+/**
+ * This is a class for the sfx button in the Main Screen. Clicking this
+ * button will make a clicking sound effect. 
+ * @author Angie (Wai Ying Li)
+ */
+
 public class SfxButton extends PennyPopButtons{
+	/**
+	 * This is the constructor to create a sfx button using the given file image
+	 * and add a click event to the button.
+	 * @param file (FileHandle) the file of the button's image
+	 */
 	public SfxButton(FileHandle image){
 		super(image);
 		addClickEvent(imgButton);
