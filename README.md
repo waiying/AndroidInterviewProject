@@ -1,7 +1,7 @@
 # Android Interview Project
 A WRKSHP (Penny Pop) Android Interview Project
 
-### Overview ###
+## Overview ##
 This project is a simple application made with libgdx. It consists of a main menu screen, a game settings screen, and 
 the connect 4 game screen. The whole application is handled by the [ProjectApplication.java](https://github.com/waiying/AndroidInterviewProject/blob/master/src/com/pennypop/project/ProjectApplication.java)
 file. In order to run the application, simply open the project folder in Eclipse and run the ProjectApplication.java file.<br>
@@ -18,10 +18,13 @@ The <b>game settings screen</b> is implemented in the [SettingsScreen.java](http
 The <b>game screen</b> is implemented in the [GameScreen.java](https://github.com/waiying/AndroidInterviewProject/blob/master/src/com/pennypop/project/GameScreen.java) file. This is where the connect 4 gameplay takes place. The connect 4 board is created according to the user's specifications in the settings screen. There is also a main menu button implemented in the [MainButton.java](https://github.com/waiying/AndroidInterviewProject/blob/master/src/com/pennypop/project/buttons/MainButton.java) file that brings the user back to the main menu screen whenever he or she wishes. 
 
 
-### Packages ###
+## Packages ##
 There are two packages made for this project: [buttons](https://github.com/waiying/AndroidInterviewProject/tree/master/src/com/pennypop/project/buttons) and [AI](https://github.com/waiying/AndroidInterviewProject/tree/master/src/com/pennypop/project/AI). <br><br>
 The buttons package has a base class for all the buttons in this application. Each button class will have its own specific
 click event. The AI package has an AI Module base class for any Connect 4 AI implementation. Currently, there is one type of AI
 implemented for the game.
+
+## AI Implementation ##
+The AI created for this connect 4 project can be viewed in the [AlphaBetaAI.java](https://github.com/waiying/AndroidInterviewProject/blob/master/src/com/pennypop/project/AI/AlphaBetaAI.java) file. This AI uses a minimax algorithm with alpha beta pruning to improve how far ahead the AI can explore down the game tree. 
 
 
